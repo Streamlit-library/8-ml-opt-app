@@ -1,5 +1,13 @@
-# 8-ml-opt-app
+# 8 Machine Learning Hyperparameter Optimization App
+1. [Importar librerías ](#schema1)
+2. [Diseño de página](#schema2)
+3. [Panel principal](#schema3)
+4. [Modelo](#schema4)
+5. [Recursos](#schema5)
 
+<hr>
+
+<a name="schema1"></a>
 
 # 1. Importar librerías
 ~~~python
@@ -14,6 +22,9 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.datasets import load_diabetes
 ~~~
+<hr>
+
+<a name="schema2"></a>
 
 # 2. Diseño de página
 ~~~python
@@ -74,6 +85,10 @@ param_grid = dict(max_features=max_features_range, n_estimators=n_estimators_ran
 
 ~~~
 
+<hr>
+
+<a name="schema3"></a>
+
 # 3. Panel principal
 
 ### Muestra el conjunto de datos
@@ -81,6 +96,9 @@ param_grid = dict(max_features=max_features_range, n_estimators=n_estimators_ran
 st.subheader('Dataset')
 ~~~
 
+<hr>
+
+<a name="schema4"></a>
 
 # 4. Modelo
 ### Cargamos los datos
@@ -196,6 +214,13 @@ else:
         build_model(df)
 
 ~~~
+<hr>
+
+<a name="schema5"></a>
+
+
+# 5. Recursos
+https://github.com/dataprofessor/ml-opt-app
 
 
 
