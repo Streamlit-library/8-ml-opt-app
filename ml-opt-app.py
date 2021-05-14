@@ -1,8 +1,3 @@
-# 8-ml-opt-app
-
-
-# 1. Importar librerías
-~~~python
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -13,39 +8,30 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.datasets import load_diabetes
-~~~
 
-# 2. Diseño de página
-~~~python
+
+#---------------------------------#
+# Diseño de página
 st.set_page_config(page_title='The Machine Learning Hyperparameter Optimization App',
     layout='wide')
-~~~
-### Título de la aplicación
-~~~python
+
+#---------------------------------#
+
+# Título de la aplicación
 st.write("""
 # The Machine Learning Hyperparameter Optimization App
 **(Regression Edition)**
 In this implementation, the *RandomForestRegressor()* function is used in this app for build a regression model using the **Random Forest** algorithm.
 """)
-~~~
-### Barra lateral - Recopila las características de entrada del usuario en el marco de datos
-~~~python
+
+#Barra lateral - Recopila las características de entrada del usuario en el marco de datos
 st.sidebar.header('Upload your CSV data')
 uploaded_file = st.sidebar.file_uploader("Upload your input CSV file", type=["csv"])
 st.sidebar.markdown("""
 [Example CSV input file](https://raw.githubusercontent.com/dataprofessor/data/master/delaney_solubility_with_descriptors.csv)
 """)
-~~~
 
-### Barra lateral - Parámetros específicos
-
-~~~python
-streamlit.slider(label, min_value=None, max_value=None, value=None, step=None, format=None, key=None, help=None)
-~~~
-value (a supported type or a tuple/list of supported types or None)
-
-
-~~~python
+# Barra lateral - Parámetros específicos
 st.sidebar.header('Set Parameters')
 split_size = st.sidebar.slider('Data split ratio (% for Training Set)', 10, 90, 80, 5)
 
@@ -72,37 +58,28 @@ n_estimators_range = np.arange(parameter_n_estimators[0], parameter_n_estimators
 max_features_range = np.arange(parameter_max_features[0], parameter_max_features[1]+1, 1)
 param_grid = dict(max_features=max_features_range, n_estimators=n_estimators_range)
 
-~~~
+# Panel principal
 
-# 3. Panel principal
-
-### Muestra el conjunto de datos
-~~~python
+# Muestra el conjunto de datos
 st.subheader('Dataset')
-~~~
 
+#---------------------------------#
+# Modelo
 
-# 4. Modelo
-### Cargamos los datos
-~~~python
 def filedownload(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
     href = f'<a href="data:file/csv;base64,{b64}" download="model_performance.csv">Download CSV File</a>'
     return href
-~~~
-### Construimos el modelo
-~~~python
+
 def build_model(df):
     X = df.iloc[:,:-1] # Todas las columnas menos la última para X
     Y = df.iloc[:,-1] # La última para Y
 
     st.markdown('A model is being built to predict the following **Y** variable:')
     st.info(Y.name)
-~~~
-### Division de los datos
-~~~python
- 
+
+    # Division de los datos
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=split_size)
     
 
@@ -133,9 +110,8 @@ def build_model(df):
 
     st.subheader('Model Parameters')
     st.write(grid.get_params())
-~~~
-### GridSearchCV
-~~~python
+
+    #-----GridSearchCV-----#
     grid_results = pd.concat([pd.DataFrame(grid.cv_results_["params"]),pd.DataFrame(grid.cv_results_["mean_test_score"], columns=["R2"])],axis=1)
     
     grid_contour = grid_results.groupby(['max_features','n_estimators']).mean()
@@ -146,10 +122,8 @@ def build_model(df):
     x = grid_pivot.columns.levels[1].values
     y = grid_pivot.index.values
     z = grid_pivot.values
-~~~
 
-### Plot
-~~~python
+    #-----Plot-----#
     layout = go.Layout(
             xaxis=go.layout.XAxis(
               title=go.layout.xaxis.Title(
@@ -194,8 +168,3 @@ else:
         st.write(df.head(5))
 
         build_model(df)
-
-~~~
-
-
-
